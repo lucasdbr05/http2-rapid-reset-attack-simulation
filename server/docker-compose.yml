@@ -1,0 +1,8 @@
+services:
+  nginx-http2:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8443:443"
+    restart: unless-stopped
