@@ -1,84 +1,99 @@
-# Educational HTTP/2 Rapid Reset Attack Simulator
+# Simulador Educacional do Ataque HTTP/2 Rapid Reset
 
-This project provides a safe and isolated environment to simulate the behavior of the **HTTP/2 Rapid Reset Attack** (CVE-2023-44487), using an NGINX server configured with HTTP/2 via Docker and a Python script that creates multiple connections and sends rapid resets to HTTP/2 streams.
-
----
-
-## Components
-
-- NGINX server with HTTP/2 and HTTPS configured via Docker
-- Python script (`simulate_reset_attack.py`) that simulates multiple HTTP/2 stream resets with `hyper-h2`
-- Shell script (`create_certs.sh`) that generates self-signed SSL certificates automatically during container build
-- Docker Compose configuration to orchestrate the environment
+Este projeto fornece um ambiente seguro e isolado para simular o comportamento do **Ataque HTTP/2 Rapid Reset** (CVE-2023-44487), utilizando um servidor NGINX configurado com HTTP/2 via Docker e scripts Python que simulam o ataque.
 
 ---
 
-## Prerequisites
+## 🎯 O que é o Ataque HTTP/2 Rapid Reset?
 
-- Docker and Docker Compose installed
-- Python 3 installed (to run the simulation script)
-- `pip install h2` for HTTP/2 library in Python
+O HTTP/2 Rapid Reset (CVE-2023-44487) é uma vulnerabilidade que permite a um atacante:
+1. Estabelecer conexões HTTP/2 com o servidor alvo
+2. Enviar múltiplas requisições rapidamente
+3. Imediatamente cancelar essas requisições com frames RST_STREAM
+4. Forçar o servidor a desperdiçar recursos processando requisições que são canceladas
+
+O resultado é um ataque de negação de serviço (DoS) eficiente que pode sobrecarregar servidores HTTP/2.
 
 ---
 
-## How to use
+## 🏗️ Componentes
 
-### 1. Clone the repository
+- **Servidor NGINX** com HTTP/2 e HTTPS configurado via Docker
+- **Cliente Python** que simula múltiplas conexões e rapid resets
+- **Scripts de monitoramento** para observar o impacto em tempo real
+- **Análise automática** dos resultados do ataque
+- **Geração automática de certificados** SSL auto-assinados
 
+---
+
+## 📋 Pré-requisitos
+
+- Docker e Docker Compose instalados
+- Python 3.7+ instalado
+- Bibliotecas Python: `h2`, `requests`
+
+---
+
+## 🚀 Como Usar
+
+### 1. Subir o servidor NGINX vulnerável
 ```bash
-git clone <repository-url>
-cd <folder-name>
+cd server
+docker compose up --build -d
 ```
 
-### 2. Start the NGINX server
-
-In the project root directory, run:
-
+### 2. Executar o ataque HTTP/2 Rapid Reset
 ```bash
-docker-compose up --build
-```
-
-This command will:
-
-- Build the NGINX image
-- Execute the `create_certs.sh` script to generate self-signed SSL certificates
-- Start the container with the HTTP/2 server listening on port 8443
-
-### 3. Run the simulation script
-
-
-```bash
+cd ../client
 pip install -r requirements.txt
-python3 simulate_reset_attack.py
+python attack.py
 ```
 
-The script will create multiple HTTP/2 connections and send rapid resets to streams, simulating the attack pattern.
+### 3. Analisar os resultados do ataque
+
+#### Usando Python:
+```bash
+python analyze_results.py
+```
 
 ---
 
-## Monitoring
+## 4. Monitoramento
 
-- To view NGINX logs in real time:
+### Monitoramento em Tempo Real
+```bash
+cd client
+python monitor_server.py
+```
 
+### Verificação Manual
 ```bash
 docker logs -f server-nginx-http2-1
-```
 
-- To monitor container resource usage:
-
-```bash
 docker stats server-nginx-http2-1
+
+curl -k https://localhost:8443
 ```
 
-- You can use `htop`, `iftop` or other tools on the host to monitor CPU, memory and network.
+
+## 🛡️ Mitigações Demonstradas
+
+Este simulador também pode ser usado para testar mitigações:
 
 ---
 
-## References
+## 📚 Estrutura de Arquivos
 
-- [CVE-2023-44487 - HTTP/2 Rapid Reset Attack](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-44487)
-- [Cloudflare Technical Breakdown](https://blog.cloudflare.com/technical-breakdown-http2-rapid-reset-ddos-attack/)
-- [hyper-h2 Python Library](https://python-hyper.org/projects/h2/en/stable/)
-- [NGINX HTTP/2 Documentation](https://nginx.org/en/docs/http/ngx_http_v2_module.html)
+```
+├── README.md
+├── client/
+│   ├── requirements.txt           # Dependências Python
+│   └── attack.py                  # Script principal do ataque
+└── server/
+    ├── docker-compose.yml        # Configuração do Docker
+    ├── Dockerfile                # Imagem do NGINX
+    ├── nginx-safe.conf           # Configuração do NGINX seguro
+    ├── nginx-vulneravel.conf     # Configuração do NGINX seguro
+    └── create-certs.sh           # Geração de certificados SSL
+```
 
----
