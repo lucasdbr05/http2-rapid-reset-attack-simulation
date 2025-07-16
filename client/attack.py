@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 HOST = 'localhost'
 PORT = 8443
 NUM_THREADS = 8
-RESETS_PER_THREAD = 30
+RESETS_PER_THREAD = 1000000
 
 def exploit_vulnerable_endpoint(thread_id):
     try:
@@ -134,7 +134,7 @@ def mass_reset_attack():
 
 def run_attack():
     print("="*73)
-    print("ATAQUE HTTP/2 RAPID RESET - GERAÇÃO DE CÓDIGOS 499")
+    print("ATAQUE HTTP/2 RAPID RESET")
     print("="*73)
     
     threads = []
