@@ -33,7 +33,7 @@ def exploit_vulnerable_endpoint(thread_id):
 
         successful_attacks = 0
         
-        endpoints = ['/slow', '/']  
+        endpoints = ['/vulnerable', '/slow', '/medium', '/fast']   
 
         for i in range(RESETS_PER_THREAD):
             endpoint = endpoints[i % len(endpoints)]
