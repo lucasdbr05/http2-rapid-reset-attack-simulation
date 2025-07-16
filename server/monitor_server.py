@@ -51,8 +51,8 @@ class ServerMonitor:
         while self.monitoring:
             try:
                 result = subprocess.run([
-                    'curl', '-k', '-s', '-o', '/dev/null', '-w', 
-                    '%{http_code}', 'https://localhost:8443'
+                    'curl', '-k', '-4', '-s', '-o', '/dev/null', '-w', 
+                    '%{http_code}', 'https://127.0.0.1:8443'
                 ], capture_output=True, text=True, timeout=5)
                 
                 status_code = result.stdout.strip()

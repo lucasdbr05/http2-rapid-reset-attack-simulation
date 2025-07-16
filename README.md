@@ -1,4 +1,4 @@
-# Educational Simulator for the HTTP/2 Rapid Reset Attack
+# HTTP/2 Rapid Reset Attack Simulator
 
 This project provides a safe and isolated environment to simulate the behavior of the **HTTP/2 Rapid Reset Attack** (CVE-2023-44487), using an NGINX server configured with HTTP/2 via Docker and Python scripts that simulate the attack.
 

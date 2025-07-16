@@ -61,7 +61,7 @@ def test_server_vulnerability():
     
     result = subprocess.run([
         'curl', '-k', '-s', '-w', '%{http_code}\\n', 
-        'https://localhost:8443/vulnerable?attack=rapid-reset&thread=7&req=28'
+        'https://127.0.0.1:8443/vulnerable?attack=rapid-reset&thread=7&req=28'
     ], capture_output=True, text=True, timeout=60)
     
     status_code = result.stdout.strip().split('\n')[-1]
