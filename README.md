@@ -81,6 +81,8 @@ curl -k https://localhost:8443
 
 ```
 ├── README.md
+├── analise_server.py             # Analyse logs
+├── monitor_server.py             # Real time monitoring
 ├── client/
 │   ├── requirements.txt           # Python dependencies
 │   └── attack.py                 # Main attack script
