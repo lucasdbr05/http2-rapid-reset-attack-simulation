@@ -1,72 +1,72 @@
-# Simulador Educacional do Ataque HTTP/2 Rapid Reset
+# Educational Simulator for the HTTP/2 Rapid Reset Attack
 
-Este projeto fornece um ambiente seguro e isolado para simular o comportamento do **Ataque HTTP/2 Rapid Reset** (CVE-2023-44487), utilizando um servidor NGINX configurado com HTTP/2 via Docker e scripts Python que simulam o ataque.
-
----
-
-## 🎯 O que é o Ataque HTTP/2 Rapid Reset?
-
-O HTTP/2 Rapid Reset (CVE-2023-44487) é uma vulnerabilidade que permite a um atacante:
-1. Estabelecer conexões HTTP/2 com o servidor alvo
-2. Enviar múltiplas requisições rapidamente
-3. Imediatamente cancelar essas requisições com frames RST_STREAM
-4. Forçar o servidor a desperdiçar recursos processando requisições que são canceladas
-
-O resultado é um ataque de negação de serviço (DoS) eficiente que pode sobrecarregar servidores HTTP/2.
+This project provides a safe and isolated environment to simulate the behavior of the **HTTP/2 Rapid Reset Attack** (CVE-2023-44487), using an NGINX server configured with HTTP/2 via Docker and Python scripts that simulate the attack.
 
 ---
 
-## 🏗️ Componentes
+## 🎯 What is the HTTP/2 Rapid Reset Attack?
 
-- **Servidor NGINX** com HTTP/2 e HTTPS configurado via Docker
-- **Cliente Python** que simula múltiplas conexões e rapid resets
-- **Scripts de monitoramento** para observar o impacto em tempo real
-- **Análise automática** dos resultados do ataque
-- **Geração automática de certificados** SSL auto-assinados
+HTTP/2 Rapid Reset (CVE-2023-44487) is a vulnerability that allows an attacker to:
+1. Establish HTTP/2 connections with the target server
+2. Send multiple requests quickly
+3. Immediately cancel these requests with RST_STREAM frames
+4. Force the server to waste resources processing requests that are canceled
 
----
-
-## 📋 Pré-requisitos
-
-- Docker e Docker Compose instalados
-- Python 3.7+ instalado
-- Bibliotecas Python: `h2`, `requests`
+The result is an efficient denial-of-service (DoS) attack that can overload HTTP/2 servers.
 
 ---
 
-## 🚀 Como Usar
+## 🏗️ Components
 
-### 1. Subir o servidor NGINX vulnerável
+- **NGINX Server** with HTTP/2 and HTTPS configured via Docker
+- **Python Client** that simulates multiple connections and rapid resets
+- **Monitoring scripts** to observe the impact in real time
+- **Automatic analysis** of attack results
+- **Automatic generation of self-signed SSL certificates**
+
+---
+
+## 📋 Prerequisites
+
+- Docker and Docker Compose installed
+- Python 3.7+ installed
+- Python libraries: `h2`, `requests`
+
+---
+
+## 🚀 How to Use
+
+### 1. Start the vulnerable NGINX server
 ```bash
 cd server
 docker compose up --build -d
 ```
 
-### 2. Executar o ataque HTTP/2 Rapid Reset
+### 2. Run the HTTP/2 Rapid Reset attack
 ```bash
 cd ../client
 pip install -r requirements.txt
 python attack.py
 ```
 
-### 3. Analisar os resultados do ataque
+### 3. Analyze the attack results
 
-#### Usando Python:
+#### Using Python:
 ```bash
 python analyze_results.py
 ```
 
 ---
 
-## 4. Monitoramento
+## 4. Monitoring
 
-### Monitoramento em Tempo Real
+### Real-Time Monitoring
 ```bash
 cd client
 python monitor_server.py
 ```
 
-### Verificação Manual
+### Manual Verification
 ```bash
 docker logs -f server-nginx-http2-1
 
@@ -75,25 +75,38 @@ docker stats server-nginx-http2-1
 curl -k https://localhost:8443
 ```
 
-
-## 🛡️ Mitigações Demonstradas
-
-Este simulador também pode ser usado para testar mitigações:
-
 ---
 
-## 📚 Estrutura de Arquivos
+## 📚 File Structure
 
 ```
 ├── README.md
 ├── client/
-│   ├── requirements.txt           # Dependências Python
-│   └── attack.py                  # Script principal do ataque
+│   ├── requirements.txt           # Python dependencies
+│   └── attack.py                 # Main attack script
 └── server/
-    ├── docker-compose.yml        # Configuração do Docker
-    ├── Dockerfile                # Imagem do NGINX
-    ├── nginx-safe.conf           # Configuração do NGINX seguro
-    ├── nginx-vulneravel.conf     # Configuração do NGINX seguro
-    └── create-certs.sh           # Geração de certificados SSL
+    ├── docker-compose.yml        # Docker configuration
+    ├── Dockerfile                # NGINX image
+    ├── nginx-safe.conf           # Safe NGINX configuration
+    ├── nginx-vulneravel.conf     # Vulnerable NGINX configuration
+    └── create-certs.sh           # SSL certificate generation
 ```
+
+---
+
+## 📈 Expected Results
+
+### Successful Attack
+- ✅ ~1000 HTTP/2 requests processed
+- ✅ Rate of ~750+ resets per second
+- ✅ Server processes requests but discards work
+- ✅ Logs show multiple canceled requests
+
+### Server Behavior
+- Processing of valid HTTP/2 requests
+- Resource waste due to resets
+- Possible performance degradation
+- In real scenarios: potential DoS
+
+---
 
