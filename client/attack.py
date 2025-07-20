@@ -82,10 +82,6 @@ def exploit_vulnerable_endpoint(thread_id):
         logger.error(f"Thread {thread_id}: Erro fatal: {e}")
 
 def mass_reset_attack():
-    """
-    Estratégia alternativa: 
-        Muitas requisições simultâneas + reset em massa
-    """
     try:
         context = ssl.create_default_context()
         context.check_hostname = False
