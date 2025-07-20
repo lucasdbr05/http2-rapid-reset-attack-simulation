@@ -2,7 +2,11 @@
 
 This project provides a safe and isolated environment to simulate the behavior of the **HTTP/2 Rapid Reset Attack** (CVE-2023-44487), using an NGINX server configured with HTTP/2 via Docker and Python scripts that simulate the attack.
 
----
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/lucasdbr05" target="_blank"><img style="border-radius: 50%;" src="https://github.com/lucasdbr05.png" width="100px;" alt="Lucas Lima"/><br /><sub><b>Lucas Lima</b></sub></a><br /></td></td>
+    <td align="center"><a href="https://github.com/Vini-ara" target="_blank"><img style="border-radius: 50%;" src="https://github.com/Vini-ara.png" width="100px;" alt="Vinicius Araujo"/><br /><sub><b>Vinicius Araujo</b></sub></a><br /</td>
+</table>
 
 ## 🎯 What is the HTTP/2 Rapid Reset Attack?
 
